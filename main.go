@@ -143,6 +143,13 @@ func main() {
 		os.Exit(1)
 	}
 
+	// Exists dir check
+	if _, err := os.Stat(*outputDir); err != nil {
+		if err2 := os.Mkdir(*outputDir, 0777); err2 != nil {
+			log.Printf("failed to create dir: %v", err2)
+		}
+	}
+
 	fmt.Println("Target image   : ", *targetImg)
 	fmt.Println("Output dir     : ", *outputDir)
 	fmt.Println("Your site name : ", *sitename)
