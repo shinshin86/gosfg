@@ -2,6 +2,8 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
+	"fmt"
 	"image"
 	"log"
 	"os"
@@ -122,27 +124,35 @@ func generateFaviconImages(targetImg, outputDir string) {
 }
 
 func main() {
-	// Specify target image.
-	targetImg := "test.png"
+	var (
+		targetImg   = flag.String("i", "", "[Required] Specify target image.")
+		outputDir   = flag.String("d", "public", "Specify output directory.")
+		sitename    = flag.String("n", "", "Specify your site name.")
+		tileColor   = flag.String("tileColor", "#da532c", "Specify tile color.")
+		themeColor  = flag.String("themeColor", "#ffffff", "Specify theme color.")
+		displayMode = flag.String("displayMode", "standalone", "Specify display mode.")
+	)
+	flag.Parse()
 
-	// Specify output directory.
-	outputDir := "public"
+	fmt.Println("=== gosfg ===")
+	fmt.Println("=============")
 
-	// Specify your site name.
-	sitename := "test"
+	// Check required parameter
+	if len(*targetImg) == 0 {
+		fmt.Println("ERROR: target image is required")
+		os.Exit(1)
+	}
 
-	// Specify tile color.
-	tileColor := "#da532c"
+	fmt.Println("Target image   : ", *targetImg)
+	fmt.Println("Output dir     : ", *outputDir)
+	fmt.Println("Your site name : ", *sitename)
+	fmt.Println("Tile color     : ", *tileColor)
+	fmt.Println("Theme color    : ", *themeColor)
+	fmt.Println("Display mode   : ", *displayMode)
 
-	// Specify theme color.
-	themeColor := "#ffffff"
-
-	// Specify display mode.
-	displayMode := "standalone"
-
-	generateFaviconImages(targetImg, outputDir)
-	generateBrowserConfigXML(filepath.Join(outputDir, "browserconfig.xml"), tileColor)
-	generateWebManifest(filepath.Join(outputDir, "site.webmanifest"), sitename, themeColor, displayMode)
+	generateFaviconImages(*targetImg, *outputDir)
+	generateBrowserConfigXML(filepath.Join(*outputDir, "browserconfig.xml"), *tileColor)
+	generateWebManifest(filepath.Join(*outputDir, "site.webmanifest"), *sitename, *themeColor, *displayMode)
 
 	log.Print("gosfg: : SUCCESS")
 }
