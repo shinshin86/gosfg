@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"image"
-	"log"
 	"os"
 	"path/filepath"
 
@@ -48,19 +47,19 @@ func generateWebManifest(dstPath, siteName, themeColor, displayMode string) {
 
 	f, err := os.Create(dstPath)
 	if err != nil {
-		log.Printf("failed to create WebManifestJson: %v", err)
+		fmt.Printf("[ERROR] Failed to create WebManifestJson:\n%v", err)
 	}
 	defer f.Close()
 
 	data, err2 := json.Marshal(webManifestJson)
 	if err2 != nil {
-		log.Printf("failed to json marshal: %v", err)
+		fmt.Printf("[ERROR] Failed to json marshal:\n%v", err)
 		os.Exit(1)
 	}
 
 	_, err3 := f.Write(data)
 	if err3 != nil {
-		log.Printf("failed to write file: %v", err)
+		fmt.Printf("[ERROR] Failed to write file:\n%v", err)
 		os.Exit(1)
 	}
 }
@@ -81,14 +80,14 @@ func generateBrowserConfigXML(dstPath, tileColor string) {
 
 	f, err := os.Create(dstPath)
 	if err != nil {
-		log.Printf("failed to create BrowserConfigXML: %v", err)
+		fmt.Printf("[ERROR] Failed to create BrowserConfigXML:\n%v", err)
 	}
 	defer f.Close()
 
 	data := []byte(configXml)
 	_, err2 := f.Write(data)
 	if err2 != nil {
-		log.Printf("failed to write file: %v", err)
+		fmt.Printf("[ERROR] Failed to write file:\n%v", err)
 		os.Exit(1)
 	}
 }
@@ -99,7 +98,7 @@ func generateImage(img *image.Image, dstPath string, width, height int) {
 
 	err := imaging.Save(resizeImg, dstPath)
 	if err != nil {
-		log.Printf("failed to save image(%s): %v", filepath.Base(dstPath), err)
+		fmt.Printf("[ERROR] Failed to save image(%s):\n%v", filepath.Base(dstPath), err)
 		os.Exit(1)
 	}
 }
@@ -107,7 +106,7 @@ func generateImage(img *image.Image, dstPath string, width, height int) {
 func generateFaviconImages(targetImg, outputDir string) {
 	src, err := imaging.Open(targetImg)
 	if err != nil {
-		log.Printf("failed to open image: %v", err)
+		fmt.Printf("[ERROR] Failed to open image:\n%v", err)
 		os.Exit(1)
 	}
 
@@ -134,8 +133,8 @@ func main() {
 	)
 	flag.Parse()
 
-	fmt.Println("=== gosfg ===")
-	fmt.Println("=============")
+	fmt.Println("========== gosfg ==========")
+	fmt.Println("===========================")
 
 	// Check required parameter
 	if len(*targetImg) == 0 {
@@ -146,7 +145,7 @@ func main() {
 	// Exists dir check
 	if _, err := os.Stat(*outputDir); err != nil {
 		if err2 := os.Mkdir(*outputDir, 0777); err2 != nil {
-			log.Printf("failed to create dir: %v", err2)
+			fmt.Printf("[ERROR] Failed to create dir:\n%v", err2)
 		}
 	}
 
@@ -156,10 +155,12 @@ func main() {
 	fmt.Println("Tile color     : ", *tileColor)
 	fmt.Println("Theme color    : ", *themeColor)
 	fmt.Println("Display mode   : ", *displayMode)
+	fmt.Println("===========================")
+	fmt.Println("")
 
 	generateFaviconImages(*targetImg, *outputDir)
 	generateBrowserConfigXML(filepath.Join(*outputDir, "browserconfig.xml"), *tileColor)
 	generateWebManifest(filepath.Join(*outputDir, "site.webmanifest"), *sitename, *themeColor, *displayMode)
 
-	log.Print("gosfg: : SUCCESS")
+	fmt.Println("Successfully generated.")
 }
