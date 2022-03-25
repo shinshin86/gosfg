@@ -17,7 +17,7 @@ You can check the detailed options with the help command.
 ```
 Usage of gosfg:
   -d string
-    	Specify output directory. (default "public")
+    	Specify output directory. If the directory does not exist, create it. (default "public")
   -displayMode string
     	Specify display mode. (default "standalone")
   -i string

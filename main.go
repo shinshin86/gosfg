@@ -126,7 +126,7 @@ func generateFaviconImages(targetImg, outputDir string) {
 func main() {
 	var (
 		targetImg   = flag.String("i", "", "[Required] Specify target image.")
-		outputDir   = flag.String("d", "public", "Specify output directory.")
+		outputDir   = flag.String("d", "public", "Specify output directory. If the directory does not exist, create it.")
 		sitename    = flag.String("n", "", "Specify your site name.")
 		tileColor   = flag.String("tileColor", "#da532c", "Specify tile color.")
 		themeColor  = flag.String("themeColor", "#ffffff", "Specify theme color.")
