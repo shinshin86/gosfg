@@ -33,3 +33,9 @@ Usage of gosfg:
 ## Why do you output favicon as png instead of ico?
 Go does not seem to natively support the ico format in stdlib at this time.  
 https://pkg.go.dev/image#section-directories
+
+## License
+[MIT](https://github.com/shinshin86/gosfg/blob/main/LICENSE)
+
+## Author
+[Yuki Shindo](https://shinshin86.com/en)
